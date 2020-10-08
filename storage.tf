@@ -25,7 +25,7 @@ resource "azurerm_storage_account" "components" {
 resource "azurerm_storage_container" "code" {
   name                  = "code"
   storage_account_name  = azurerm_storage_account.components.name
-  container_access_type = "blob"
+  container_access_type = "private"
 }
 
 
