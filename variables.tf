@@ -8,8 +8,17 @@ variable "tags" {
   description = "Additional tags (e.g. `map('BusinessUnit','XYZ')`"
 }
 
-variable "shared_resource_group" {}
-
 variable "storage_account_replication_type" {
   default = "ZRS"
 }
+
+variable "region" {
+  type        = string
+  description = "Region: Azure region"
+
+  # validation {
+  #   condition     = contains(["westeurope", "northeurope"], var.region)
+  #   error_message = "The region value must be one of westeurope, northeurope"
+  # }
+}
+

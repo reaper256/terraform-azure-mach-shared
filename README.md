@@ -9,7 +9,7 @@ This resource group should already be created (manually) because a Terraform sta
 ```
 module "shared_infra" {
   source                       = "git::https://git.labdigital.nl/mach/terraform/terraform-azure-shared-infra.git"
-  name_prefix                  = "mach"
-  shared_resource_group        = "mach-shared-rg"
+  name_prefix                  = "mach-we"
+  region                       = "westeurope"
 }
 ```

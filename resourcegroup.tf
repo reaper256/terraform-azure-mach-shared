@@ -1,3 +1,6 @@
-data "azurerm_resource_group" "shared" {
-  name     = var.shared_resource_group
+resource "azurerm_resource_group" "shared" {
+  name     = format("%s-rg", var.name_prefix)
+  location = local.region_full
+
+  tags     = var.tags
 }
