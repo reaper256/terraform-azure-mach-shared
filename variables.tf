@@ -22,5 +22,5 @@ variable "region" {
   # }
 }
 
-variabe "dns_zone_name" {}
+variable "dns_zone_name" {}
 
