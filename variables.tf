@@ -22,5 +22,8 @@ variable "region" {
   # }
 }
 
-variable "dns_zone_name" {}
+variable "dns_zone_name" {
+  type = string
+  default = ""
+}
 
