@@ -15,6 +15,9 @@ resource "azurerm_dns_zone" "dns_zone" {
 
 
 resource "azurerm_key_vault" "certificates" {
+  # This might look odd, but in practise it will only be 1 key vault that is going to be created.
+  # If in any case we need to support multiple domain names, we just need to create 1 key-vault 
+  # (and flatten the set passed on to for_each)
   for_each = local.dns_zone_names
 
   name                = replace(format("%s-kv-certs", var.name_prefix), "-", "")
