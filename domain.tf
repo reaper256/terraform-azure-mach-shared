@@ -21,83 +21,76 @@ resource "azurerm_key_vault" "certificates" {
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   enabled_for_disk_encryption = true
   sku_name                    = "standard"
+}
 
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = "721b7d1e-ef69-4fff-9f35-e0ba71c3b21b" # Microsoft.Azure.Frontdoor
+resource "azurerm_key_vault_access_policy" "frontdoor_access" {
+  key_vault_id = azurerm_key_vault.certificates.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id = "ad0e1c7e-6d38-4ba4-9efd-0bc77ba9f037" # Microsoft.Azure.Frontdoor
 
-    certificate_permissions = [
-      "get",
-      "list",
-    ]
+  certificate_permissions = [
+    "get",
+    "list",
+  ]
 
-    key_permissions    = []
-    secret_permissions = [
-      "get",
-      "list",
-    ]
-  }
+  secret_permissions = [
+    "get",
+    "list",
+  ]
+}
 
-  dynamic "access_policy" {
-    for_each = toset(var.certificate_access_object_ids)
-    
-    content {
-      tenant_id = data.azurerm_client_config.current.tenant_id
-      object_id = access_policy.value
+resource "azurerm_key_vault_access_policy" "cdn_access" {
+  key_vault_id = azurerm_key_vault.certificates.id
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id    = "205478c0-bd83-4e1b-a9d6-db63a3e1e1c8" # Microsoft.Azure.Cdn
 
-      certificate_permissions = [
-        "create",
-        "delete",
-        "get",
-        "list",
-      ]
+  certificate_permissions = [
+    "get",
+    "list",
+  ]
 
-      key_permissions = [
-        "create",
-        "delete",
-        "get",
-        "list",
-      ]
+  secret_permissions = [
+    "get",
+    "list",
+  ]
+}
 
-      secret_permissions = [
-        "delete",
-        "get",
-        "list",
-        "set",
-      ]
-    }
-  }
-    
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = "ad0e1c7e-6d38-4ba4-9efd-0bc77ba9f037" # Microsoft.Azure.Frontdoor
+resource "azurerm_key_vault_access_policy" "manage_access" {
+  for_each = toset(var.certificate_access_object_ids)
+  
+  key_vault_id = azurerm_key_vault.certificates.id
+  
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = each.value
 
-    certificate_permissions = [
-      "get",
-      "list",
-    ]
+  certificate_permissions = [
+    "create",
+    "delete",
+    "deleteissuers",
+    "get",
+    "getissuers",
+    "import",
+    "list",
+    "listissuers",
+    "managecontacts",
+    "manageissuers",
+    "setissuers",
+    "update",
+  ]
 
-    key_permissions    = []
-    secret_permissions = [
-      "get",
-      "list",
-    ]
-  }
+  key_permissions = [
+    "create",
+    "delete",
+    "get",
+    "list",
+  ]
 
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id    = "205478c0-bd83-4e1b-a9d6-db63a3e1e1c8" # Microsoft.Azure.Cdn
-
-    certificate_permissions = [
-      "get",
-      "list",
-    ]
-
-    secret_permissions = [
-      "get",
-      "list",
-    ]
-  }
+  secret_permissions = [
+    "delete",
+    "get",
+    "list",
+    "set",
+  ]
 }
 
 resource "azurerm_key_vault_certificate" "cert" {
@@ -154,4 +147,8 @@ resource "azurerm_key_vault_certificate" "cert" {
       validity_in_months = 12
     }
   }
+
+  depends_on = [
+    azurerm_key_vault_access_policy.manage_access
+  ]
 }
