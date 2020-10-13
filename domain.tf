@@ -15,12 +15,12 @@ resource "azurerm_dns_zone" "dns_zone" {
 
 
 resource "azurerm_key_vault" "certificates" {
-  name                = replace(format("%s-kv-certs", var.name_prefix), "-", "")
-  location            = azurerm_resource_group.shared.location
-  resource_group_name = azurerm_resource_group.shared.name
-  tenant_id           = data.azurerm_client_config.current.tenant_id
-
-  sku_name = "standard"
+  name                        = replace(format("%s-kv-certs", var.name_prefix), "-", "")
+  location                    = azurerm_resource_group.shared.location
+  resource_group_name         = azurerm_resource_group.shared.name
+  tenant_id                   = data.azurerm_client_config.current.tenant_id
+  enabled_for_disk_encryption = true
+  sku_name                    = "standard"
 
   dynamic "access_policy" {
     for_each = toset(var.certificate_access_object_ids)
