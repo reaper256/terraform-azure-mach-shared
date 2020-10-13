@@ -15,11 +15,6 @@ resource "azurerm_dns_zone" "dns_zone" {
 
 
 resource "azurerm_key_vault" "certificates" {
-  # This might look odd, but in practise it will only be 1 key vault that is going to be created.
-  # If in any case we need to support multiple domain names, we just need to create 1 key-vault 
-  # (and flatten the set passed on to for_each)
-  for_each = local.dns_zone_names
-
   name                = replace(format("%s-kv-certs", var.name_prefix), "-", "")
   location            = azurerm_resource_group.shared.location
   resource_group_name = azurerm_resource_group.shared.name
@@ -27,62 +22,67 @@ resource "azurerm_key_vault" "certificates" {
 
   sku_name = "standard"
 
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
+  dynamic "access_policy" {
+    for_each = toset(var.certificate_access_object_ids)
+    
+    content {
+      tenant_id = data.azurerm_client_config.current.tenant_id
+      object_id = access_policy.value
 
-    certificate_permissions = [
-      "create",
-      "delete",
-      "deleteissuers",
-      "get",
-      "getissuers",
-      "import",
-      "list",
-      "listissuers",
-      "managecontacts",
-      "manageissuers",
-      "setissuers",
-      "update",
-    ]
+      certificate_permissions = [
+        "create",
+        "delete",
+        "deleteissuers",
+        "get",
+        "getissuers",
+        "import",
+        "list",
+        "listissuers",
+        "managecontacts",
+        "manageissuers",
+        "setissuers",
+        "update",
+      ]
 
-    key_permissions = [
-      "backup",
-      "create",
-      "decrypt",
-      "delete",
-      "encrypt",
-      "get",
-      "import",
-      "list",
-      "purge",
-      "recover",
-      "restore",
-      "sign",
-      "unwrapKey",
-      "update",
-      "verify",
-      "wrapKey",
-    ]
+      key_permissions = [
+        "backup",
+        "create",
+        "decrypt",
+        "delete",
+        "encrypt",
+        "get",
+        "import",
+        "list",
+        "purge",
+        "recover",
+        "restore",
+        "sign",
+        "unwrapKey",
+        "update",
+        "verify",
+        "wrapKey",
+      ]
 
-    secret_permissions = [
-      "backup",
-      "delete",
-      "get",
-      "list",
-      "purge",
-      "recover",
-      "restore",
-      "set",
-    ]
+      secret_permissions = [
+        "backup",
+        "delete",
+        "get",
+        "list",
+        "purge",
+        "recover",
+        "restore",
+        "set",
+      ]
+    }
   }
+    
 }
 
 resource "azurerm_key_vault_certificate" "cert" {
   for_each     = local.dns_zone_names
 
   name         = replace(each.value, ".", "-")
-  key_vault_id = azurerm_key_vault.certificates[each.value].id
+  key_vault_id = azurerm_key_vault.certificates.id
 
   certificate_policy {
     issuer_parameters {

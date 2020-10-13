@@ -27,3 +27,7 @@ variable "dns_zone_name" {
   default = ""
 }
 
+variable "certificate_access_object_ids" {
+  type = list
+  default = []
+}

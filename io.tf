@@ -3,7 +3,7 @@ output "resource_group_name" {
 }
 
 output "ssl_key_vault_name" {
-  value = var.dns_zone_name != "" ? azurerm_key_vault.certificates[var.dns_zone_name].name : ""
+  value = azurerm_key_vault.certificates.name
 }
 
 output "ssl_key_vault_secret_name" {
