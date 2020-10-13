@@ -76,6 +76,19 @@ resource "azurerm_key_vault" "certificates" {
     }
   }
     
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = "ad0e1c7e-6d38-4ba4-9efd-0bc77ba9f037" # Microsoft.Azure.Frontdoor
+
+    certificate_permissions = [
+      "get",
+    ]
+
+    key_permissions    = []
+    secret_permissions = [
+      "get",
+    ]
+  }
 }
 
 resource "azurerm_key_vault_certificate" "cert" {
