@@ -32,45 +32,21 @@ resource "azurerm_key_vault" "certificates" {
       certificate_permissions = [
         "create",
         "delete",
-        "deleteissuers",
         "get",
-        "getissuers",
-        "import",
         "list",
-        "listissuers",
-        "managecontacts",
-        "manageissuers",
-        "setissuers",
-        "update",
       ]
 
       key_permissions = [
-        "backup",
         "create",
-        "decrypt",
         "delete",
-        "encrypt",
         "get",
-        "import",
         "list",
-        "purge",
-        "recover",
-        "restore",
-        "sign",
-        "unwrapKey",
-        "update",
-        "verify",
-        "wrapKey",
       ]
 
       secret_permissions = [
-        "backup",
         "delete",
         "get",
         "list",
-        "purge",
-        "recover",
-        "restore",
         "set",
       ]
     }
@@ -82,11 +58,28 @@ resource "azurerm_key_vault" "certificates" {
 
     certificate_permissions = [
       "get",
+      "list",
     ]
 
     key_permissions    = []
     secret_permissions = [
       "get",
+      "list",
+    ]
+  }
+
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id    = "205478c0-bd83-4e1b-a9d6-db63a3e1e1c8" # Microsoft.Azure.Cdn
+
+    certificate_permissions = [
+      "get",
+      "list",
+    ]
+
+    secret_permissions = [
+      "get",
+      "list",
     ]
   }
 }
