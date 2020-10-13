@@ -22,6 +22,22 @@ resource "azurerm_key_vault" "certificates" {
   enabled_for_disk_encryption = true
   sku_name                    = "standard"
 
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = "721b7d1e-ef69-4fff-9f35-e0ba71c3b21b" # Microsoft.Azure.Frontdoor
+
+    certificate_permissions = [
+      "get",
+      "list",
+    ]
+
+    key_permissions    = []
+    secret_permissions = [
+      "get",
+      "list",
+    ]
+  }
+
   dynamic "access_policy" {
     for_each = toset(var.certificate_access_object_ids)
     
