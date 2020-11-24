@@ -2,8 +2,6 @@
 
 To provision a 'shared' resource group in Azure.
 
-This resource group should already be created (manually) because a Terraform state backend should already be present.
-
 ## Usage
 
 ```
