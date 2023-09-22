@@ -18,7 +18,7 @@ resource "azurerm_storage_account" "components" {
   account_kind             = "BlockBlobStorage"
   account_tier             = "Premium"
   account_replication_type = var.storage_account_replication_type
-  allow_blob_public_access = true
+  allow_nested_items_to_be_public = true
   tags = var.tags
 }
 
