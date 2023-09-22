@@ -66,15 +66,15 @@ resource "azurerm_key_vault_access_policy" "manage_access" {
   certificate_permissions = [
     "Create",
     "Delete",
-    "Deleteissuers",
+    "DeleteIssuers",
     "Get",
-    "Getissuers",
+    "GetIssuers",
     "Import",
     "List",
-    "Listissuers",
-    "Managecontacts",
-    "Manageissuers",
-    "Setissuers",
+    "ListIssuers",
+    "ManageContacts",
+    "ManageIssuers",
+    "SetIssuers",
     "Update",
   ]
 
