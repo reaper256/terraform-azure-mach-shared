@@ -29,13 +29,13 @@ resource "azurerm_key_vault_access_policy" "frontdoor_access" {
   object_id = "ad0e1c7e-6d38-4ba4-9efd-0bc77ba9f037" # Microsoft.Azure.Frontdoor
 
   certificate_permissions = [
-    "get",
-    "list",
+    "Get",
+    "List",
   ]
 
   secret_permissions = [
-    "get",
-    "list",
+    "Get",
+    "List",
   ]
 }
 
@@ -45,13 +45,13 @@ resource "azurerm_key_vault_access_policy" "cdn_access" {
   object_id    = "205478c0-bd83-4e1b-a9d6-db63a3e1e1c8" # Microsoft.Azure.Cdn
 
   certificate_permissions = [
-    "get",
-    "list",
+    "Get",
+    "List",
   ]
 
   secret_permissions = [
-    "get",
-    "list",
+    "Get",
+    "List",
   ]
 }
 
@@ -64,32 +64,32 @@ resource "azurerm_key_vault_access_policy" "manage_access" {
   object_id = each.value
 
   certificate_permissions = [
-    "create",
-    "delete",
-    "deleteissuers",
-    "get",
-    "getissuers",
-    "import",
-    "list",
-    "listissuers",
-    "managecontacts",
-    "manageissuers",
-    "setissuers",
-    "update",
+    "Create",
+    "Delete",
+    "Deleteissuers",
+    "Get",
+    "Getissuers",
+    "Import",
+    "List",
+    "Listissuers",
+    "Managecontacts",
+    "Manageissuers",
+    "Setissuers",
+    "Update",
   ]
 
   key_permissions = [
-    "create",
-    "delete",
-    "get",
-    "list",
+    "Create",
+    "Delete",
+    "Get",
+    "List",
   ]
 
   secret_permissions = [
-    "delete",
-    "get",
-    "list",
-    "set",
+    "Delete",
+    "Get",
+    "List",
+    "Set",
   ]
 }
 
